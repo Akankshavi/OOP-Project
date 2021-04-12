@@ -1,27 +1,34 @@
 package com.example.loginapp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Credentials {
-    String name = "Akanksha Hublikar";
-    String password = "123456";
-    Credentials(String Username, String Password)
-    {
-        this.name=Username;
-        this.password=Password;
+    private HashMap<String, String> credentialMapper = new HashMap<String, String>();
+
+    public void addCredentials(String username, String password){
+        credentialMapper.put(username, password);
     }
 
-    public String getName() {
-        return name;
+    public boolean checkUsername(String username){
+        return credentialMapper.containsKey(username);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean checkCredentials(String username, String password){
+
+        if(credentialMapper.containsKey(username)){
+            return password.equals(credentialMapper.get(username));
+        }
+
+        return false;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void loadCredentials(Map<String, ?> preferencesMap){
+        for(Map.Entry<String, ?> entries : preferencesMap.entrySet()){
+            if(!entries.getKey().equals("RememberMeCheckbox") || !entries.getKey().equals("LastSavedUsername") ||
+                    !entries.getKey().equals("LastSavedPassword")){
+                credentialMapper.put(entries.getKey(), entries.getValue().toString());
+            }
+        }
     }
 }
